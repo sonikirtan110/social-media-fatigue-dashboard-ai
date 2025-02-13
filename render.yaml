@@ -1,0 +1,9 @@
+services:
+  - type: web
+    name: sap-project
+    runtime: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn -w 4 -b 0.0.0.0:10000 appPrev:appPrev
+    envVars:
+      - key: PORT
+        value: 10000
