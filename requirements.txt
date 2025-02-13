@@ -7,3 +7,5 @@ scikit-learn==1.4.0
 joblib==1.2.0
 mysql-connector-python==8.0.32
 python-dotenv==0.19.2
+Flask==2.3.3
+Werkzeug==3.0.1  # Optional; Flask 2.3.3+ handles compatibility
