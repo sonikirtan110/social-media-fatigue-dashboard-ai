@@ -1,7 +1,9 @@
+import os
+
 DB_CONFIG = {
-    "host": "localhost", 
-    "port": 3310,  
-    "user": "root",
-    "password": "1978",
-    "database": "social"
+    "host": os.environ.get("DB_HOST"),
+    "user": os.environ.get("DB_USER"),
+    "password": os.environ.get("DB_PASSWORD"),
+    "database": os.environ.get("DB_NAME"),
+    "port": int(os.environ.get("DB_PORT", 3310))
 }
