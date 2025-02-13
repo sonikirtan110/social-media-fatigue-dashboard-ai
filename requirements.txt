@@ -5,4 +5,4 @@ numpy
 scikit-learn==1.4.2
 joblib
 gunicorn
-mysql-connector-python=
+mysql-connector-python
