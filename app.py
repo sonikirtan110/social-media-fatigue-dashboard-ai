@@ -2,71 +2,51 @@ from flask import Flask, request, jsonify, render_template
 from flask_cors import CORS
 import pandas as pd
 import joblib
-import mysql.connector
-from config import DB_CONFIG
 import logging
-import time
-from threading import Thread
-
-# Configure logging
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
+from db import create_connection, initialize_database
+from config import DB_CONFIG
 
 app = Flask(__name__)
 CORS(app)
+
+# Initialize database
+initialize_database()
 
 # Load model
 try:
     model = joblib.load('fatigue_model.pkl')
 except Exception as e:
-    logger.error(f"Model loading failed: {str(e)}")
+    logging.error(f"Model loading failed: {str(e)}")
     raise
 
-def get_db_connection():
-    try:
-        conn = mysql.connector.connect(**DB_CONFIG)
-        logger.info("Database connection established")
-        return conn
-    except Exception as e:
-        logger.error(f"Database connection failed: {str(e)}")
-        return None
-
-# Modified log_prediction function
 def log_prediction(data, prediction, category):
-    def async_log():
-        max_retries = 3
-        for attempt in range(max_retries):
-            try:
-                conn = mysql.connector.connect(**DB_CONFIG)
-                cursor = conn.cursor()
-                query = """
-                INSERT INTO predictions 
-                (age, social_media_time, screen_time, platform, prediction, category)
-                VALUES (%s, %s, %s, %s, %s, %s)
-                """
-                values = (
-                    int(data['Age']),
-                    float(data['SocialMediaTime']),
-                    float(data['ScreenTime']),
-                    str(data['PrimaryPlatform']),
-                    float(round(prediction, 2)),
-                    str(category)
-                )
-                cursor.execute(query, values)
-                conn.commit()
-                print(f"Successfully logged prediction (Attempt {attempt+1})")
-                break
-            except Exception as e:
-                print(f"Database error (Attempt {attempt+1}): {str(e)}")
-                time.sleep(2)
-            finally:
-                if 'conn' in locals() and conn.is_connected():
-                    cursor.close()
-                    conn.close()
-    
-    # Run in background thread to prevent API delays
-    Thread(target=async_log).start()
+    conn = create_connection()
+    if conn:
+        try:
+            cursor = conn.cursor()
+            query = """
+            INSERT INTO predictions 
+            (age, social_media_time, screen_time, platform, prediction, category)
+            VALUES (%s, %s, %s, %s, %s, %s)
+            """
+            values = (
+                data['Age'],
+                data['SocialMediaTime'],
+                data['ScreenTime'],
+                data['PrimaryPlatform'],
+                round(prediction, 2),
+                category
+            )
+            cursor.execute(query, values)
+            conn.commit()
+            logging.info("Prediction logged successfully")
+        except Exception as e:
+            logging.error(f"Database error: {str(e)}")
+        finally:
+            cursor.close()
             conn.close()
+
+# Rest of the code remains same...
 
 def get_fatigue_category(prediction):
     if prediction < 3.5:
