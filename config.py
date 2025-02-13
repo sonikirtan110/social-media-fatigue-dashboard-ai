@@ -1,8 +1,10 @@
+import os
+
 DB_CONFIG = {
-    'host': '127.0.0.1',
-    'user': 'root',
-    'password': '1978',
-    'database': 'social',
-    'port': 3310,  # Updated port
+    'host': os.environ.get('DB_HOST', 'localhost'),
+    'user': os.environ.get('DB_USER', 'root'),
+    'password': os.environ.get('DB_PASSWORD', '1978'),
+    'database': os.environ.get('DB_NAME', 'social'),
+    'port': int(os.environ.get('DB_PORT', '3310')),
     'auth_plugin': 'mysql_native_password'
 }
