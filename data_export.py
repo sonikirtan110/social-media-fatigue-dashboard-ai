@@ -1,17 +1,15 @@
 import pandas as pd
-import mysql.connector  # Added missing import
+import mysql.connector
 from config import DB_CONFIG
 
-def export_to_csv():
-    # Establish connection using DB_CONFIG
-    conn = mysql.connector.connect(**DB_CONFIG)
-    query = "SELECT * FROM predictions"
-    # Read the SQL query result into a DataFrame
-    df = pd.read_sql(query, conn)
-    # Export the DataFrame to a CSV file named 'powerbi_data.csv'
-    df.to_csv('powerbi_data.csv', index=False)
-    conn.close()
-    print("Data exported successfully to powerbi_data.csv")
+def export_data():
+    try:
+        conn = mysql.connector.connect(**DB_CONFIG)
+        df = pd.read_sql("SELECT * FROM predictions", conn)
+        df.to_csv('predictions_export.csv', index=False)
+        print("Exported", len(df), "records to predictions_export.csv")
+    except Exception as e:
+        print("Export failed:", str(e))
 
 if __name__ == '__main__':
-    export_to_csv()
+    export_data()
