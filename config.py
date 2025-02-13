@@ -1,7 +1,8 @@
 DB_CONFIG = {
-    "host": "dpg-cun0rkggph6c738b80p0-a",  # Render's internal hostname
-    "user": "root",
-    "password": "Fli2004fhpehf3WS9RKXSMGuzBfCVKG7",  # Use environment variables for security
-    "database": "social_261u",
-    "port": 5432
+    'host': 'localhost',
+    'user': 'root',
+    'password': '1978',
+    'database': 'social',
+    'port': 3310,  # Updated port
+    'auth_plugin': 'mysql_native_password'
 }
