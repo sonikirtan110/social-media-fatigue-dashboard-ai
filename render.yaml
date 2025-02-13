@@ -3,13 +3,8 @@ services:
     name: sap-project
     runtime: python
     buildCommand: |
-      python -m pip install --upgrade pip
       pip install -r requirements.txt
-    startCommand: gunicorn app:app
-    envVars:
-      - key: SKLEARN_ALLOW_DEPRECATED_SKLEARN_PACKAGE_INSTALL
-        value: "True"
-    startCommand: gunicorn app:app
+    startCommand: gunicorn --timeout 120 --workers 4 --bind 0.0.0.0:10000 app:app
     envVars:
       - key: DB_HOST
         value: your-mysql-host
