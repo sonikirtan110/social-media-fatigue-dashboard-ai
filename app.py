@@ -3,8 +3,8 @@ from flask_cors import CORS
 import pandas as pd
 import joblib
 import os
-import mysql.connector
-from config import DB_CONFIG  # DB_CONFIG must be defined in config.py
+import mysql.connector  # Ensure you have mysql-connector-python installed
+from config import DB_CONFIG  # Make sure config.py defines DB_CONFIG
 
 app = Flask(__name__)
 CORS(app)
@@ -59,18 +59,17 @@ class FatigueAdvisor:
         # Screen Time Recommendations
         if input_data['ScreenTime'] > 8:
             recommendations.append("🔅 Reduce daily screen time by 2 hours")
-        # Platform-specific Advice
+        # Platform-specific Advice (handle common typos)
+        platform = input_data['PrimaryPlatform'].replace("Instgram", "Instagram").replace("Youtube", "YouTube")
         platform_advice = {
             'Instagram': "Try using grayscale mode to reduce visual stimulation",
             'YouTube': "Enable reminder breaks every 45 minutes of viewing",
             'TikTok': "Activate screen time management in app settings"
         }
-        # Use cleaned platform value (handle typos)
-        platform = input_data['PrimaryPlatform'].replace("Instgram", "Instagram").replace("Youtube", "YouTube")
         recommendations.append(platform_advice.get(platform, "Take regular 5-minute breaks"))
         # Sleep Quality Correlation
         if fatigue_level > 6:
-            recommendations.append("💤 Improve sleep quality with digital detox 1 hour before bed")
+            recommendations.append("💤 Improve sleep quality with a digital detox 1 hour before bed")
         return recommendations[:3]
 
 @app.route('/')
@@ -80,30 +79,28 @@ def home():
 @app.route('/predict', methods=['POST'])
 def predict_route():
     try:
-        # Validate that request is JSON
+        # Validate request type
         if not request.is_json:
             return jsonify({"error": "Request must be JSON"}), 415
-        
+
         data = request.get_json()
-        
+
         # Validate required fields
         required_fields = ['Age', 'SocialMediaTime', 'ScreenTime', 'PrimaryPlatform']
         missing = [field for field in required_fields if field not in data]
         if missing:
             return jsonify({"error": f"Missing required fields: {', '.join(missing)}"}), 400
-        
+
         # Clean up platform field
-        platform = data.get('PrimaryPlatform', 'Other')
-        platform = platform.replace('Instgram', 'Instagram').replace('Youtube', 'YouTube')
-        
-        # Prepare input data with defaults (for any missing optional fields)
+        platform = data.get('PrimaryPlatform', 'Other').replace("Instgram", "Instagram").replace("Youtube", "YouTube")
+
         input_data = {
             'Age': data['Age'],
             'SocialMediaTime': data['SocialMediaTime'],
             'ScreenTime': data['ScreenTime'],
             'PrimaryPlatform': platform
         }
-        
+
         # Create DataFrame for prediction
         input_df = pd.DataFrame([input_data])
         
@@ -111,7 +108,7 @@ def predict_route():
         prediction_value = model.predict(input_df)[0]
         category = get_fatigue_category(prediction_value)
         
-        # Log prediction to MySQL
+        # Log the prediction to MySQL
         log_prediction(input_data, prediction_value, category)
         
         # Generate recommendations
