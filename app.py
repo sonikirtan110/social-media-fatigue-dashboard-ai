@@ -17,6 +17,18 @@ model = joblib.load(MODEL_PATH)
 
 def get_db_connection():
     return mysql.connector.connect(**DB_CONFIG)
+import mysql.connector
+from config import DB_CONFIG
+
+def get_connection():
+    try:
+        conn = mysql.connector.connect(**DB_CONFIG)
+        if conn.is_connected():
+            print("Database connection successful!")
+            return conn
+    except Exception as e:
+        print(f"Error connecting to database: {e}")
+        return None
 
 def log_prediction(data, prediction, category):
     try:
