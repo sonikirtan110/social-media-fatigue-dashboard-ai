@@ -5,6 +5,8 @@ import joblib
 import mysql.connector
 from config import DB_CONFIG
 import logging
+import time
+from threading import Thread
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -29,34 +31,41 @@ def get_db_connection():
         logger.error(f"Database connection failed: {str(e)}")
         return None
 
+# Modified log_prediction function
 def log_prediction(data, prediction, category):
-    conn = get_db_connection()
-    if not conn:
-        return
-        
-    try:
-        cursor = conn.cursor()
-        query = """
-        INSERT INTO predictions 
-        (age, social_media_time, screen_time, platform, prediction, category)
-        VALUES (%s, %s, %s, %s, %s, %s)
-        """
-        values = (
-            data['Age'],
-            data['SocialMediaTime'],
-            data['ScreenTime'],
-            data['PrimaryPlatform'],
-            round(prediction, 2),
-            category
-        )
-        cursor.execute(query, values)
-        conn.commit()
-        logger.info("Prediction logged successfully")
-    except Exception as e:
-        logger.error(f"Database error: {str(e)}")
-    finally:
-        if conn.is_connected():
-            cursor.close()
+    def async_log():
+        max_retries = 3
+        for attempt in range(max_retries):
+            try:
+                conn = mysql.connector.connect(**DB_CONFIG)
+                cursor = conn.cursor()
+                query = """
+                INSERT INTO predictions 
+                (age, social_media_time, screen_time, platform, prediction, category)
+                VALUES (%s, %s, %s, %s, %s, %s)
+                """
+                values = (
+                    int(data['Age']),
+                    float(data['SocialMediaTime']),
+                    float(data['ScreenTime']),
+                    str(data['PrimaryPlatform']),
+                    float(round(prediction, 2)),
+                    str(category)
+                )
+                cursor.execute(query, values)
+                conn.commit()
+                print(f"Successfully logged prediction (Attempt {attempt+1})")
+                break
+            except Exception as e:
+                print(f"Database error (Attempt {attempt+1}): {str(e)}")
+                time.sleep(2)
+            finally:
+                if 'conn' in locals() and conn.is_connected():
+                    cursor.close()
+                    conn.close()
+    
+    # Run in background thread to prevent API delays
+    Thread(target=async_log).start()
             conn.close()
 
 def get_fatigue_category(prediction):
@@ -130,10 +139,11 @@ def predict_route():
         recommendations = FatigueAdvisor.generate_recommendations(input_data, prediction_value)
         
         return jsonify({
-            "Fatigue Category": category,
-            "Predicted Fatigue Level": round(float(prediction_value), 2),
-            "Recommendations": recommendations
-        })
+    "Fatigue Category": category,
+    "Predicted Fatigue Level": round(float(prediction_value), 2),
+    "Recommendations": recommendations,
+    "database_status": "queued_for_storage"  # Remove this line after testing
+})
     
     except Exception as e:
         return jsonify({"error": str(e)}), 500
