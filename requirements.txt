@@ -1,8 +1,8 @@
-Flask==3.1.0
-flask-cors==5.0.0
-pandas==2.2.3
-numpy==2.2.2
+Flask
+flask-cors
+pandas
+numpy
 scikit-learn==1.4.2
-joblib==1.4.2
-gunicorn==23.0.0
-mysql-connector-python==8.0.33
+joblib
+gunicorn
+mysql-connector-python=
