@@ -2,16 +2,18 @@ services:
   - type: web
     name: sap-project
     runtime: python
-    buildCommand: "./build.sh"
-    startCommand: "gunicorn app:app"
+    buildCommand: 
+      - pip install -r requirements.txt
+      - python db.py
+    startCommand: gunicorn app:app
     envVars:
       - key: DB_HOST
-        value: localhost
+        value: your-mysql-host
       - key: DB_USER
         value: root
-      - key: DB_PASSWORD
+      - key: DB_PASS
         value: 1978
       - key: DB_NAME
         value: social
       - key: DB_PORT
-        value: 3310
+        value: "3310"
