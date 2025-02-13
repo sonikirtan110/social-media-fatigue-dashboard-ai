@@ -2,9 +2,13 @@ services:
   - type: web
     name: sap-project
     runtime: python
-    buildCommand: 
-      - pip install -r requirements.txt
-      - python db.py
+    buildCommand: |
+      python -m pip install --upgrade pip
+      pip install -r requirements.txt
+    startCommand: gunicorn app:app
+    envVars:
+      - key: SKLEARN_ALLOW_DEPRECATED_SKLEARN_PACKAGE_INSTALL
+        value: "True"
     startCommand: gunicorn app:app
     envVars:
       - key: DB_HOST
