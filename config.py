@@ -5,5 +5,5 @@ DB_CONFIG = {
     "user": os.environ.get("DB_USER"),
     "password": os.environ.get("DB_PASSWORD"),
     "database": os.environ.get("DB_NAME"),
-    "port": int(os.environ.get("DB_PORT", 3310))
+    "port": int(os.environ.get("DB_PORT", 5432))
 }
