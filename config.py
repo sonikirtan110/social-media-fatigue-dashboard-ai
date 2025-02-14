@@ -1,8 +1,8 @@
 DB_CONFIG = {
-    'host': 'mysql-8cea257-sonikirtan110-eedc.h.aivencloud.com',  # Aiven host
-    'user': 'avnadmin',            # Default admin user
-    'password': 'AVNS_qmLnbGkGDN5w069YjCs',   # Your password
-    'database': 'social',       # Default database name
-    'port': 10102,                 # Aiven's MySQL port
+    'host': 'sq112.freesqldatabase.com',
+    'user': 'sq112762721',
+    'password': '8vKPLjc4m5',
+    'database': 'sq112762721',
+    'port': 3306,
     'auth_plugin': 'mysql_native_password'
 }
