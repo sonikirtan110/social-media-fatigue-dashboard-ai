@@ -1,5 +1,5 @@
 DB_CONFIG = {
-    'host': '103.26.49.80',  # ngrok hostname
+    'host': 'localhost',  # ngrok hostname
     'user': 'root',
     'password': '1978',
     'database': 'social',
