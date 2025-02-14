@@ -1,13 +1,14 @@
-# db.py
-import mysql.connector
 from config import DB_CONFIG
+import mysql.connector
+import logging
 
 def create_connection():
     try:
         conn = mysql.connector.connect(**DB_CONFIG)
+        logging.info("Database connection successful.")
         return conn
     except Exception as e:
-        print(f"Database connection error: {str(e)}")
+        logging.error(f"Database connection failed: {e}")
         return None
 
 def initialize_database():
@@ -15,21 +16,22 @@ def initialize_database():
     if conn:
         try:
             cursor = conn.cursor()
-            cursor.execute("""
+            cursor.execute('''
                 CREATE TABLE IF NOT EXISTS predictions (
                     id INT AUTO_INCREMENT PRIMARY KEY,
-                    age INT NOT NULL,
-                    social_media_time FLOAT NOT NULL,
-                    screen_time FLOAT NOT NULL,
-                    platform VARCHAR(50) NOT NULL,
-                    prediction FLOAT NOT NULL,
-                    category VARCHAR(20) NOT NULL,
-                    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                    age INT,
+                    social_media_time FLOAT,
+                    screen_time FLOAT,
+                    platform VARCHAR(50),
+                    prediction FLOAT,
+                    category VARCHAR(20),
+                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
                 )
-            """)
+            ''')
             conn.commit()
+            logging.info("Database initialized successfully.")
         except Exception as e:
-            print(f"Initialization error: {str(e)}")
+            logging.error(f"Database initialization failed: {e}")
         finally:
             cursor.close()
             conn.close()
