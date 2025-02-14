@@ -1,21 +1,29 @@
+# db.py
 import psycopg2
-from psycopg2 import sql
 from config import DB_CONFIG
+import logging
 
 def create_connection():
+    """
+    Establish and return a PostgreSQL database connection.
+    """
     try:
         conn = psycopg2.connect(**DB_CONFIG)
+        print("Database connection successful!")
         return conn
     except Exception as e:
-        print(f"Database connection error: {e}")
+        logging.error(f"Database connection failed: {e}")
         return None
 
 def initialize_database():
+    """
+    Create the predictions table if it doesn't exist.
+    """
     conn = create_connection()
-    if conn:
+    if conn is not None:
         try:
             cursor = conn.cursor()
-            cursor.execute("""
+            cursor.execute('''
                 CREATE TABLE IF NOT EXISTS predictions (
                     id SERIAL PRIMARY KEY,
                     age INT,
@@ -25,12 +33,12 @@ def initialize_database():
                     prediction FLOAT,
                     category VARCHAR(20),
                     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-                );
-            """)
+                )
+            ''')
             conn.commit()
             print("Database initialized successfully.")
         except Exception as e:
-            print(f"Database initialization error: {e}")
+            logging.error(f"Database initialization failed: {e}")
         finally:
             cursor.close()
             conn.close()
