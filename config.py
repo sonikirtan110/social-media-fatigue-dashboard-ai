@@ -1,8 +1,8 @@
-# config.py
 DB_CONFIG = {
-    'host': 'dpg-cunkaeggph6c73eujvqg-a',  # internal hostname from Render
-    'port': 5432,
+    'host': 'localhost',
     'user': 'root',
-    'password': 'dmTVQlqg7dgX7HvvIFGPA3tkoClUv1ZW',
-    'database': 'social_4stp'
+    'password': '1978',
+    'database': 'social',
+    'port': 3310,  # Updated port
+    'auth_plugin': 'mysql_native_password'
 }
