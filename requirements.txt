@@ -2,7 +2,8 @@
 gunicorn
 flask
 flask-cors
-pandas==1.3.5
+pandas
+numpy
 scikit-learn==1.4.2
 joblib
 mysql-connector-python
