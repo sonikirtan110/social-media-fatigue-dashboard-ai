@@ -1,11 +1,8 @@
-import mysql.connector
-
 DB_CONFIG = {
-    'host': '127.0.0.1',
+    'host': '0.tcp.ngrok.io',  # ngrok hostname
     'user': 'root',
     'password': '1978',
     'database': 'social',
-    'port': 3310,
+    'port': 12345,  # ngrok forwarded port
     'auth_plugin': 'mysql_native_password'
 }
-
