@@ -361,7 +361,6 @@ in
 
 - **LinkedIn:** [https://www.linkedin.com/in/kirtansoni02/](https://www.linkedin.com/in/kirtansoni02/)
 - **Render Service URL:** [https://social-media-fatigue-dashboard-ai.onrender.com](https://social-media-fatigue-dashboard-ai.onrender.com)
-- **Power BI Dashboard:** [View Power BI Dashboard](https://app.powerbi.com/view?r=YOUR_REPORT_LINK)
 
 ---
 
@@ -370,16 +369,3 @@ in
 Social Media Fatigue Dashboard AI provides real-time insights into digital fatigue by integrating AI predictions, interactive visualizations, and database logging. This project combines Python, Flask, scikit-learn, PostgreSQL, and Power BI to deliver actionable insights on social media usage and digital well-being.
 
 ---
-```
-
----
-
-### Instructions:
-
-1. **Place the README.md file at the root of your repository.**
-2. **Ensure all images and the video are located in the `visual/` folder** (with filenames matching those referenced).
-3. **Customize any placeholder text or links** (e.g., `YOUR_REPORT_LINK` in the Power BI Dashboard link).
-4. **Commit and push to GitHub.**  
-5. **Deploy your project on Render** using the instructions provided.
-
-This README.md file now includes embedded images and a video, along with all required sections, and uses your LinkedIn URL and clear instructions for database and Render deployment.
