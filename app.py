@@ -15,35 +15,6 @@ if not os.path.exists(MODEL_PATH):
     raise FileNotFoundError(f"Model file {MODEL_PATH} not found.")
 model = joblib.load(MODEL_PATH)
 
-def get_db_connection():
-    return mysql.connector.connect(**DB_CONFIG)
-
-def log_prediction(data, prediction, category):
-    try:
-        conn = get_db_connection()
-        cursor = conn.cursor()
-        query = """
-        INSERT INTO predictions 
-        (age, social_media_time, screen_time, platform, prediction, category)
-        VALUES (%s, %s, %s, %s, %s, %s)
-        """
-        values = (
-            data.get('Age'),
-            data.get('SocialMediaTime'),
-            data.get('ScreenTime'),
-            data.get('PrimaryPlatform'),
-            prediction,
-            category
-        )
-        cursor.execute(query, values)
-        conn.commit()
-    except Exception as e:
-        print("Database error:", str(e))
-    finally:
-        if conn.is_connected():
-            cursor.close()
-            conn.close()
-
 def get_fatigue_category(prediction):
     if prediction < 3.5:
         return "Low"
