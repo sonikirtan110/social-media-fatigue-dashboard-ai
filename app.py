@@ -5,7 +5,7 @@ import joblib
 import os
 
 # Load the trained model
-model = joblib.load('fatigue_prediction_model.pkl')
+model = joblib.load('fatigue_model.pkl')
 
 app = Flask(__name__)
 CORS(app)
