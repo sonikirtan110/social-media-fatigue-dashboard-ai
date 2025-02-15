@@ -82,8 +82,6 @@ def predict_route():
         prediction_value = model.predict(input_df)[0]
         category = get_fatigue_category(prediction_value)
         
-        # Log prediction to MySQL
-        log_prediction(input_data, prediction_value, category)
         
         # Generate recommendations
         recommendations = FatigueAdvisor.generate_recommendations(input_data, prediction_value)
