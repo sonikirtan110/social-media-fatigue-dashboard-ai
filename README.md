@@ -1,6 +1,6 @@
 # Social Media Fatigue Dashboard AI
 
-Social Media Fatigue Dashboard AI leverages machine learning to predict digital fatigue from social media usage. This project integrates a Flask REST API, an ML model trained with scikit-learn, a cloud PostgreSQL database on Render, and interactive visualizations built in Power BI.
+Social Media Fatigue Dashboard AI leverages machine learning to predict digital fatigue based on social media usage metrics. The solution integrates a Flask REST API, an ML model trained with scikit-learn, a cloud PostgreSQL database on Render, and interactive visualizations built in Power BI.
 
 ---
 
@@ -19,16 +19,18 @@ Social Media Fatigue Dashboard AI leverages machine learning to predict digital 
 - [Visual Assets](#visual-assets)
 - [How to Use](#how-to-use)
 - [Links & Contact](#links--contact)
+- [Conclusion](#conclusion)
 
 ---
 
 ## Overview
 
-Social Media Fatigue Dashboard AI is an end-to-end solution that uses AI to predict digital fatigue based on user metrics such as screen time, social media time, and platform usage. The system includes:
-- A Flask REST API (with and without local DB logging)
-- A machine learning model (trained using scikit-learn)
-- Cloud-based database logging (PostgreSQL on Render)
-- An interactive Power BI dashboard for real-time visual insights
+**Social Media Fatigue Dashboard AI** predicts digital fatigue from user data such as screen time, social media time, and platform usage. The project components include:
+- **Flask API**: Provides fatigue predictions and recommendations.
+- **Machine Learning Model**: Trained with scikit-learn.
+- **Cloud Database**: Logs prediction history (PostgreSQL on Render or local MySQL).
+- **Power BI Dashboard**: Interactive visualizations for real-time insights.
+- **Deployment on Render**: Seamless cloud deployment and management.
 
 ---
 
@@ -36,12 +38,12 @@ Social Media Fatigue Dashboard AI is an end-to-end solution that uses AI to pred
 
 ```
 social-media-fatigue-dashboard-ai/
-├── app.py                  # Flask API without local DB logging (for Render deployment)
-├── appPrev.py              # Flask API with local database connection code (for local testing)
-├── config.py               # Database configuration (for PostgreSQL on Render or MySQL locally)
+├── app.py                  # Flask API (Render deployment, no DB logging)
+├── appPrev.py              # Flask API with local DB connection (for testing)
+├── config.py               # Database configuration (for PostgreSQL/MySQL)
 ├── db.py                   # Database connection and initialization functions
-├── data_export.py          # Script to export prediction logs to CSV for Power BI
-├── fatigue_model.pkl       # Trained machine learning model
+├── data_export.py          # Script to export predictions to CSV for Power BI
+├── fatigue_model.pkl       # Trained ML model file
 ├── fatigue_prediction_model.pkl
 ├── fatigue_prediction_modellf.pkl
 ├── SMMLipynb               # Jupyter Notebook for model training and analysis
@@ -49,31 +51,36 @@ social-media-fatigue-dashboard-ai/
 ├── dashboard.pbix          # Power BI report file
 ├── templates/
 │   └── index.html          # HTML frontend for the API
-├── visual/                 # Visual assets\n│   ├── pic1.png        # Power BI Overview screenshot\n│   ├── pic2.png        # Usage Analysis screenshot\n│   ├── pic3.png        # Fatigue Insights screenshot\n│   ├── pic4.png        # Deep Dive screenshot\n│   ├── pic5.png        # Summary screenshot\n│   ├── database.png    # Database view (pgAdmin/WorkBench)\n│   └── video.mp4       # Demo video\n└── render.yaml           # Render deployment configuration
+├── visual/                 # Contains visual assets:
+│   ├── pic1.png            # Overview Dashboard screenshot
+│   ├── pic2.png            # Detailed Usage Analysis screenshot
+│   ├── pic3.png            # Fatigue Insights screenshot
+│   ├── pic4.png            # Deep Dive into Platforms screenshot
+│   ├── pic5.png            # Summary & Recommendations screenshot
+│   ├── database.png        # Database view (MySQL Workbench/pgAdmin)
+│   ├── html.png            # HTML frontend screenshot
+│   └── video.mp4           # Demo video
+└── render.yaml             # Render deployment configuration
 ```
 
 ---
 
 ## Data and Model
 
-- **Data Source:** `social_media_data.csv`  
-  Columns include Age, SocialMediaTime, ScreenTime, PrimaryPlatform, etc.
+- **Data Source:** `social_media_data.csv` (columns include Age, SocialMediaTime, ScreenTime, PrimaryPlatform, etc.)
 - **Feature Engineering:**  
   - *TotalEntertainmentTime* = VideoTime + MusicTime + GamingTime  
   - *ScreenTimePerNotification* = ScreenTime / (Notifications + 1)
 - **Model Training:**  
-  Multiple algorithms (Linear Regression, Decision Tree, Random Forest, Gradient Boosting) were compared without tuning. The best model is saved as `fatigue_model.pkl`.
+  Multiple algorithms (Linear Regression, Decision Tree, Random Forest, Gradient Boosting) were compared without hyperparameter tuning. The best model is saved as `fatigue_model.pkl`.
 
 ---
 
 ## API and Flask Application
 
-The API is built with Flask and supports two configurations:
-- **app.py:** For Render deployment (no local DB logging)
-- **appPrev.py:** For local testing with database logging
+The API is implemented in `app.py` (for Render deployment) and `appPrev.py` (for local testing with DB logging). The `/predict` endpoint accepts JSON input and returns fatigue predictions and recommendations.
 
-**API Endpoint:** `/predict`  
-**Expected JSON Input:**
+**Sample Input:**
 ```json
 {
     "Age": 62,
@@ -82,7 +89,8 @@ The API is built with Flask and supports two configurations:
     "PrimaryPlatform": "TikTok"
 }
 ```
-**Expected JSON Output:**
+
+**Sample Output:**
 ```json
 {
     "Fatigue Category": "Average",
@@ -98,7 +106,7 @@ The API is built with Flask and supports two configurations:
 
 ## Database Setup (Local & Cloud)
 
-### Local MySQL Setup (for testing)
+### Local MySQL (for testing)
 - **config.py (local):**
   ```python
   DB_CONFIG = {
@@ -110,8 +118,8 @@ The API is built with Flask and supports two configurations:
       'auth_plugin': 'mysql_native_password'
   }
   ```
-- **Initialize Table:**
-  Run the following SQL in MySQL Workbench:
+- **SQL Setup:**  
+  Use MySQL Workbench to run:
   ```sql
   CREATE DATABASE IF NOT EXISTS social;
   USE social;
@@ -128,12 +136,6 @@ The API is built with Flask and supports two configurations:
   ```
 
 ### Cloud PostgreSQL on Render (Recommended)
-- **Render Connection Details:**  
-  - Host: `dpg-cunkaeggph6c73eujvqg-a`
-  - Port: `5432`
-  - Database: `social_4stp`
-  - User: `root`
-  - Password: *provided by Render*
 - **config.py (cloud):**
   ```python
   DB_CONFIG = {
@@ -144,31 +146,35 @@ The API is built with Flask and supports two configurations:
       'database': 'social_4stp'
   }
   ```
-- **Initialize Database:**  
-  Use `initialize_database()` in `db.py` to create the `predictions` table on Render.
+- **Initialization:**  
+  Run `initialize_database()` from `db.py` to create the `predictions` table.
+- **Access via pgAdmin:**  
+  Use pgAdmin with external host `dpg-cunkaeggph6c73eujvqg-a.render.com`, port `5432`, and credentials.
 
 ---
 
 ## Power BI Dashboard
 
-The Power BI dashboard (dashboard.pbix) includes multiple pages:
-
+### Pages Overview
 1. **Overview Dashboard:**  
-   KPI Cards for Total Social Media Time, Average Screen Time, Predicted Fatigue Level, Fatigue Category; Line Chart (Fatigue Level vs. Age); Bar Chart (Platform Usage); Pie Chart (Fatigue Distribution).
+   - KPI Cards: Total Social Media Time, Average Screen Time, Predicted Fatigue Level, Fatigue Category  
+   - Line Chart: Fatigue Level vs. Age  
+   - Bar Chart: Top Platforms by Usage Time  
+   - Pie Chart: Fatigue Distribution
 
 2. **Detailed Social Media Usage:**  
-   Visual breakdown of usage by platform, age group, and content type.
+   - Visual breakdown by platform, age group, and content type
 
 3. **Fatigue Insights:**  
-   Trend analysis, scatter plots, and detailed fatigue predictions.
+   - Trend analysis, scatter plots, and detailed fatigue predictions
 
 4. **Deep Dive into Platforms:**  
-   Interactive filtering using platform icons (clicking on an icon filters visuals for that platform).
+   - Interactive filtering using platform icons (e.g., clicking a Facebook icon shows Facebook data)
 
 5. **Summary & Recommendations:**  
-   An executive summary of key findings and actionable recommendations.
+   - Executive summary of key findings and recommendations
 
-### **Dynamic Data Refresh (M Query)**
+### Dynamic Data Refresh (M Query)
 ```m
 let
     timeStamp = Number.ToText(Number.From(DateTime.LocalNow())),
@@ -190,56 +196,64 @@ let
 in
     resultTable
 ```
-*Create parameters (`paramAge`, `paramSocialMediaTime`, `paramScreenTime`, `paramPlatform`) via Manage Parameters in Power BI.*
+*Create parameters (`paramAge`, `paramSocialMediaTime`, `paramScreenTime`, `paramPlatform`) via Manage Parameters.*
 
-### **DAX Measures & Calculated Columns**
+### DAX Measures & Calculated Columns
 
-**Total Social Media Time:**
-```DAX
-Total_Social_Media_Time = SUM(social_media_data[SocialMediaTime])
-```
-**Average Screen Time:**
-```DAX
-Avg_Screen_Time = AVERAGE(social_media_data[ScreenTime])
-```
-**Fatigue Category Count:**
-```DAX
-Fatigue_Category_Count = COUNT(social_media_data[fatigue_category])
-```
-**Predicted Fatigue Level Average:**
-```DAX
-Predicted_Fatigue_Level_Avg = AVERAGE(social_media_data[predicted_fatigue_level])
-```
-**Users With High Fatigue:**
-```DAX
-Users_With_High_Fatigue = COUNTROWS(FILTER(social_media_data, social_media_data[fatigue_category] = "High"))
-```
-**Percentage of High Fatigue Users:**
-```DAX
-Percentage_High_Fatigue = DIVIDE([Users_With_High_Fatigue], COUNTROWS(social_media_data), 0)
-```
-
-*Add additional measures as required for your analysis.*
+- **Total_Social_Media_Time:**  
+  ```DAX
+  Total_Social_Media_Time = SUM(social_media_data[SocialMediaTime])
+  ```
+- **Avg_Screen_Time:**  
+  ```DAX
+  Avg_Screen_Time = AVERAGE(social_media_data[ScreenTime])
+  ```
+- **Fatigue_Category_Count:**  
+  ```DAX
+  Fatigue_Category_Count = COUNT(social_media_data[fatigue_category])
+  ```
+- **Predicted_Fatigue_Level_Avg:**  
+  ```DAX
+  Predicted_Fatigue_Level_Avg = AVERAGE(social_media_data[predicted_fatigue_level])
+  ```
+- **Users_With_High_Fatigue:**  
+  ```DAX
+  Users_With_High_Fatigue = COUNTROWS(FILTER(social_media_data, social_media_data[fatigue_category] = "High"))
+  ```
+- **Percentage_High_Fatigue:**  
+  ```DAX
+  Percentage_High_Fatigue = DIVIDE([Users_With_High_Fatigue], COUNTROWS(social_media_data), 0)
+  ```
 
 ---
 
 ## Visual Assets
 
-### **Power BI Dashboard Screenshots (in `visual/` folder)**
-- **pic1.png:** Overview Dashboard  
-- **pic2.png:** Detailed Social Media Usage  
-- **pic3.png:** Fatigue Insights  
-- **pic4.png:** Deep Dive into Platforms  
-- **pic5.png:** Summary & Recommendations  
+### Power BI Dashboard Screenshots
+- **Overview:**  
+  ![Overview Dashboard](visual/pic.png)
+- **Detailed Usage Analysis:**  
+  ![Detailed Usage](visual/pic2.png)
+- **Fatigue Insights:**  
+  ![Fatigue Insights](visual/pic3.png)
+- **Deep Dive into Platforms:**  
+  ![Deep Dive](visual/pic4.png)
+- **Summary & Recommendations:**  
+  ![Summary](visual/pic5.png)
 
-### **Database Screenshot**
-- **database.png:** Screenshot of the `predictions` table in MySQL Workbench/pgAdmin.
+### Database Screenshot
+![Database View](visual/database.png)
 
-### **HTML Frontend Screenshot**
-- **html.png:** Screenshot of the index.html frontend.
+### HTML Frontend Screenshot
+![HTML Frontend](visual/html.png)
 
-### **Demo Video**
-- **video.mp4:** A demonstration video of the dashboard and API.
+### Demo Video
+<p align="center">
+  <video width="640" controls>
+    <source src="visual/video.gif" type="video/mp4">
+    
+  </video>
+</p>
 
 ---
 
@@ -250,45 +264,47 @@ Percentage_High_Fatigue = DIVIDE([Users_With_High_Fatigue], COUNTROWS(social_med
    python app.py
    ```
 2. **Test API via Postman:**  
-   Use the `/predict` endpoint with a JSON body (e.g., as shown above) to receive predictions.
+   - Endpoint: `https://social-media-fatigue-dashboard-ai.onrender.com/predict`
+   - Sample JSON Input:
+     ```json
+     {
+         "Age": 62,
+         "SocialMediaTime": 2.35,
+         "ScreenTime": 8.33,
+         "PrimaryPlatform": "TikTok"
+     }
+     ```
 3. **Export Data:**  
-   Run `python data_export.py` to export the predictions table to `powerbi_data.csv` (if needed).
-4. **Open the Power BI Report:**  
-   Open `dashboard.pbix` and refresh data using either the CSV export or the dynamic M Query.
+   Run `python data_export.py` to generate `powerbi_data.csv`.
+4. **Open Power BI Report:**  
+   Open `dashboard.pbix` and refresh data using the dynamic M Query.
 5. **Interact with the Dashboard:**  
-   Use interactive filters, slicers, and navigation buttons (with icons) to explore data by platform and demographic.
+   Use navigation buttons and interactive icons to filter by platform.
 
 ---
 
 ## Render Deployment Instructions
 
-1. **Push Code to GitHub:**  
+1. **Push Code to GitHub:**
    ```bash
    git init
    git add .
-   git commit -m "Initial commit for SocialMedia-Fatigue-Insights project"
+   git commit -m "Initial commit for Social Media Fatigue Dashboard AI project"
    git remote add origin https://github.com/yourusername/social-media-fatigue-dashboard-ai.git
    git push -u origin main
    ```
-2. **Deploy on Render:**  
-   - Log in to Render and create a new Web Service.  
-   - Connect your GitHub repo and select branch `main`.  
-   - **Start Command:**  
+2. **Deploy on Render:**
+   - Log in to Render and create a new Web Service.
+   - Connect your GitHub repository and select the `main` branch.
+   - **Start Command:**
      ```
      gunicorn --timeout 120 -w 4 -b 0.0.0.0:$PORT app:app
      ```
-   - Set environment variables as needed.
-3. **Access Your Service:**  
-   The public URL (e.g., `https://social-media-fatigue-dashboard-ai.onrender.com`) is provided once deployment is complete.
-4. **Database Access:**  
-   - Use PGHero or pgAdmin with the Render PostgreSQL connection details provided in your Render dashboard.
-
----
-
-## Power BI Dashboard Link
-
-For online access, publish your Power BI report to Power BI Service and share the link. For example:  
-[View Power BI Dashboard](https://app.powerbi.com/view?r=YOUR_REPORT_LINK)
+   - Set required environment variables for database credentials.
+3. **Access PGHero/Database:**  
+   Use PGHero (available via Render dashboard) or pgAdmin to monitor your cloud database.
+4. **Test Public API:**  
+   Verify your API via the public URL, e.g., `https://social-media-fatigue-dashboard-ai.onrender.com/predict`.
 
 ---
 
@@ -297,7 +313,7 @@ For online access, publish your Power BI report to Power BI Service and share th
 - **Endpoint:**  
   `https://social-media-fatigue-dashboard-ai.onrender.com/predict`
 - **Method:** POST  
-- **Headers:** `Content-Type: application/json`  
+- **Headers:** `Content-Type: application/json`
 - **Sample Request Body:**
   ```json
   {
@@ -321,25 +337,58 @@ For online access, publish your Power BI report to Power BI Service and share th
 
 ---
 
-## Contact & Links
+## DAX Measures & Calculated Columns
 
-- **LinkedIn:** [sonikirtan02](https://www.linkedin.com/in/sonikirtan02/)
+- **Total_Social_Media_Time:**  
+  ```DAX
+  Total_Social_Media_Time = SUM(social_media_data[SocialMediaTime])
+  ```
+- **Avg_Screen_Time:**  
+  ```DAX
+  Avg_Screen_Time = AVERAGE(social_media_data[ScreenTime])
+  ```
+- **Fatigue_Category_Count:**  
+  ```DAX
+  Fatigue_Category_Count = COUNT(social_media_data[fatigue_category])
+  ```
+- **Predicted_Fatigue_Level_Avg:**  
+  ```DAX
+  Predicted_Fatigue_Level_Avg = AVERAGE(social_media_data[predicted_fatigue_level])
+  ```
+- **Users_With_High_Fatigue:**  
+  ```DAX
+  Users_With_High_Fatigue = COUNTROWS(FILTER(social_media_data, social_media_data[fatigue_category] = \"High\"))
+  ```
+- **Percentage_High_Fatigue:**  
+  ```DAX
+  Percentage_High_Fatigue = DIVIDE([Users_With_High_Fatigue], COUNTROWS(social_media_data), 0)
+  ```
+
+---
+
+## Links & Contact
+
+- **LinkedIn:** [https://www.linkedin.com/in/kirtansoni02/](https://www.linkedin.com/in/kirtansoni02/)
 - **Render Service URL:** [https://social-media-fatigue-dashboard-ai.onrender.com](https://social-media-fatigue-dashboard-ai.onrender.com)
 - **Power BI Dashboard:** [View Power BI Dashboard](https://app.powerbi.com/view?r=YOUR_REPORT_LINK)
 
 ---
 
-This README provides a comprehensive overview of the project, including details on database setup, API usage, Power BI dashboard, and deployment on Render. Customize the placeholders as needed and ensure your visual assets and links are correctly referenced. 
+## Conclusion
 
-Feel free to adjust further to meet your project requirements!
+Social Media Fatigue Dashboard AI provides real-time insights into digital fatigue by integrating AI predictions, interactive visualizations, and database logging. This project combines Python, Flask, scikit-learn, PostgreSQL, and Power BI to deliver actionable insights on social media usage and digital well-being.
+
+---
 ```
 
 ---
 
-This README.md file includes:
-- A clear project title.
-- Table of contents.
-- Detailed sections covering project structure, data/model, API, database setup, Power BI dashboard (with dynamic M query and DAX measures), visual asset links (with placeholders for images and video), instructions for using Postman, Render deployment steps, and contact details.
-- A Power BI dashboard link placeholder.
-- It does not include hackathon info, and includes only one LinkedIn link as requested.
+### Instructions:
 
+1. **Place the README.md file at the root of your repository.**
+2. **Ensure all images and the video are located in the `visual/` folder** (with filenames matching those referenced).
+3. **Customize any placeholder text or links** (e.g., `YOUR_REPORT_LINK` in the Power BI Dashboard link).
+4. **Commit and push to GitHub.**  
+5. **Deploy your project on Render** using the instructions provided.
+
+This README.md file now includes embedded images and a video, along with all required sections, and uses your LinkedIn URL and clear instructions for database and Render deployment.
