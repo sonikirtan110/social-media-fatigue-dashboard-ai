@@ -45,8 +45,8 @@ social-media-fatigue-dashboard-ai/
 ├── data_export.py          # Script to export predictions to CSV for Power BI
 ├── fatigue_model.pkl       # Trained ML model file
 ├── fatigue_prediction_model.pkl
-├── fatigue_prediction_modellf.pkl
-├── SMMLipynb               # Jupyter Notebook for model training and analysis
+├── SMLipynb               # Jupyter Notebook for model training and analysis [fatigue_model.pkl]
+├── SMMLipynb               # Jupyter Notebook for model training and analysis [fatigue_prediction_model.pkl]
 ├── social_media_data.csv   # Sample dataset
 ├── dashboard.pbix          # Power BI report file
 ├── templates/
@@ -93,12 +93,12 @@ The API is implemented in `app.py` (for Render deployment) and `appPrev.py` (for
 **Sample Output:**
 ```json
 {
-    "Fatigue Category": "Average",
-    "Predicted Fatigue Level": 5.01,
     "Recommendations": [
         "🔅 Reduce daily screen time by 2 hours",
         "Activate screen time management in app settings"
-    ]
+    ],
+    "fatigue_category": "Average",
+    "predicted_fatigue_level": 5.01
 }
 ```
 
@@ -195,9 +195,8 @@ let
     resultTable = Table.FromRecords({jsonResponse})
 in
     resultTable
-```
-*Create parameters (`paramAge`, `paramSocialMediaTime`, `paramScreenTime`, `paramPlatform`) via Manage Parameters.*
 
+```
 ### DAX Measures & Calculated Columns
 
 - **Total_Social_Media_Time:**  
@@ -230,15 +229,15 @@ in
 ## Visual Assets
 
 ### Power BI Dashboard Screenshots
-- **Overview:**  
+  ## Overview 
   ![Overview Dashboard](visual/pic.png)
-- **Detailed Usage Analysis:**  
+  ## Detailed Usage Analysis
   ![Detailed Usage](visual/pic2.png)
-- **Fatigue Insights:**  
+  ## Fatigue Insights
   ![Fatigue Insights](visual/pic3.png)
-- **Deep Dive into Platforms:**  
+  ## Deep Dive into Platforms 
   ![Deep Dive](visual/pic4.png)
-- **Summary & Recommendations:**  
+  ## Summary & Recommendations 
   ![Summary](visual/pic5.png)
 
 ### Database Screenshot
@@ -246,14 +245,6 @@ in
 
 ### HTML Frontend Screenshot
 ![HTML Frontend](visual/html.png)
-
-### Demo Video
-<p align="center">
-  <video width="640" controls>
-    <source src="visual/video.gif" type="video/mp4">
-    
-  </video>
-</p>
 
 ---
 
@@ -326,12 +317,12 @@ in
 - **Expected Response:**
   ```json
   {
-      "Fatigue Category": "Average",
-      "Predicted Fatigue Level": 5.01,
-      "Recommendations": [
-          "🔅 Reduce daily screen time by 2 hours",
-          "Activate screen time management in app settings"
-      ]
+    "Recommendations": [
+        "🔅 Reduce daily screen time by 2 hours",
+        "Activate screen time management in app settings"
+    ],
+    "fatigue_category": "Average",
+    "predicted_fatigue_level": 5.01
   }
   ```
 
