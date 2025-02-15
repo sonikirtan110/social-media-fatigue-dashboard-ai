@@ -230,7 +230,7 @@ in
 
 ### Power BI Dashboard Screenshots
   ## Overview 
-  ![Overview Dashboard](visual/pic.png)
+  ![Overview Dashboard](visual/pic1.png)
   ## Detailed Usage Analysis
   ![Detailed Usage](visual/pic2.png)
   ## Fatigue Insights
