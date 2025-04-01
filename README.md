@@ -361,6 +361,8 @@ in
 
 - **LinkedIn:** [https://www.linkedin.com/in/kirtansoni02/](https://www.linkedin.com/in/kirtansoni02/)
 - **Render Service URL:** [https://social-media-fatigue-dashboard-ai.onrender.com](https://social-media-fatigue-dashboard-ai.onrender.com)
+- **PowerBI Live Preview:**[https://app.powerbi.com/view?r=eyJrIjoiMjkxODA1OWQtZmNhOS00YmZiLThmZjMtMjA2ZTExNjQ5OGE5IiwidCI6ImRhYTU5MmNhLWRlN2ItNGM1NC04ODM2LTkxYTY2OTBmZTE5NyJ9&pageName=57e7f34abb9002d1e2a0&pageName=aa428d58030a139e48c1](https://app.powerbi.com/view?r=eyJrIjoiMjkxODA1OWQtZmNhOS00YmZiLThmZjMtMjA2ZTExNjQ5OGE5IiwidCI6ImRhYTU5MmNhLWRlN2ItNGM1NC04ODM2LTkxYTY2OTBmZTE5NyJ9&pageName=57e7f34abb9002d1e2a0)
+- **novypro project:**[https://project.novypro.com/zZNzt7](https://project.novypro.com/zZNzt7)
 
 ---
 
